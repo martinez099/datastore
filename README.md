@@ -1,2 +1,2 @@
 # datastore
-Redis as a data store
+This is a simple FLASK application showing Redis as a data store.
