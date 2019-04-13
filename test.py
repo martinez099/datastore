@@ -23,7 +23,7 @@ prod2 = {
     "Price": 23.23,
     "Currency": "EUR",
     "MainCategory": "Category2",
-    "Images": ["asdfasdfasdfasfffdfadsfasdfasdfasdf", "yqqqqvcycvycvyxvcycxvvxcyxcvyvxc", "qyyyywerqwreqwerqwerqwerqwrer"]
+    "Images": ["asdfasdfasdfasfffdfadsfasdfasdfasdf", "yqqqqvcycvycvyxvcycxvvxcyxcvyvxc", "qyyyywerqwreqwewerqwerqwrer"]
 }
 
 prod3 = {
@@ -75,7 +75,11 @@ class DataStoreTestCase(unittest.TestCase):
             rv = self.app.post('/product', data=json.dumps(prod))
             assert rv.status_code == 200
 
-    def test_cc_get(self):
+    def test_b_get(self):
+        rv = self.app.get('/product/3')
+        assert 'Product3' == json.loads(rv.data)['Name']
+
+    def test_c_get(self):
         rv = self.app.get('/category/2')
         assert 'Category2' == json.loads(rv.data)['Name']
 
@@ -83,41 +87,36 @@ class DataStoreTestCase(unittest.TestCase):
         rv = self.app.get('/list/2')
         assert 3 == len(json.loads(rv.data))
 
-    def test_dd_list(self):
+    def test_e_list(self):
         rv = self.app.get('/list')
-        assert 'Category1' == json.loads(rv.data)[0]
+        assert 'Category2' == json.loads(rv.data)[0]
 
-    def test_e_search(self):
+    def test_f_search(self):
         rv = self.app.get('/search/Prod')
         assert 5 == len(json.loads(rv.data))
 
-    def test_f_delete(self):
+    def test_g_delete(self):
         rv = self.app.delete('/product/1')
         assert b'true' in rv.data
 
-    def test_g_search2(self):
+    def test_h_search(self):
         rv = self.app.get('/search/Prod')
         assert 4 == len(json.loads(rv.data))
 
-    def test_h_update(self):
-        rv = self.app.put('/product/2', data=json.dumps(prod3))
+    def test_i_update(self):
+        new_prod = prod2
+        new_prod['Description'] = 'anotherDescription'
+        new_prod['Images'] = ["asdfasdfasdfasfffdfadsfasdfasdfasdf", "yqqqqvcycvycvyxvcycxvvxcyxcvyvxc", "changedImage"]
+        rv = self.app.put('/product/2', data=json.dumps(new_prod))
         assert b'true' in rv.data
 
-    def test_i_get(self):
+    def test_j_get(self):
         rv = self.app.get('/product/2')
-        assert 'Product3' == json.loads(rv.data).get('Name')
+        assert 'anotherDescription' == json.loads(rv.data).get('Description')
 
     def test_k_get(self):
         rv = self.app.get('/image/10')
         assert b'vuuvuuvuvsduwefubuiewfaodfsdf' == rv.data
-
-    def test_l_delete(self):
-        rv = self.app.delete('/product/2')
-        assert b'true' in rv.data
-
-    def test_m_delete(self):
-        rv = self.app.delete('/product/3')
-        assert b'true' in rv.data
 
     @classmethod
     def tearDownClass(cls):
