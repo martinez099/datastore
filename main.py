@@ -1,5 +1,4 @@
 import json
-import os
 
 from redis import StrictRedis
 from flask import Flask
@@ -9,23 +8,7 @@ from datastore import DataStore
 
 
 app = Flask(__name__)
-
-port = os.getenv("PORT")
-vcap_services = os.getenv("VCAP_SERVICES")
-if vcap_services:
-    vcap_services = json.loads(vcap_services)
-    port = int(port)
-
-    #r_host = vcap_services["redislabs"][0]["credentials"]["host"]
-    r_host = vcap_services["redislabs"][0]["credentials"]["ip_list"][0]
-    r_port = vcap_services["redislabs"][0]["credentials"]["port"]
-    r_pass = vcap_services["redislabs"][0]["credentials"]["password"]
-
-    ds = DataStore(StrictRedis(decode_responses=True, host=r_host, port=r_port, password=r_pass))
-
-else:
-
-    ds = DataStore(StrictRedis(decode_responses=True))
+ds = DataStore(StrictRedis(decode_responses=True))
 
 
 @app.route('/product/<product_id>', methods=['GET'])
@@ -181,4 +164,4 @@ def GET_list():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=port)
+    app.run()
