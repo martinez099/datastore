@@ -76,8 +76,8 @@ class DataStore(object):
         :param product_id: The ID of the product.
         :return: Success.
         """
-        return bool(self.redis.delete('product:{}'.format(product_id))) \
-            and bool(self.redis.srem('products', product_id))
+        return bool(self.redis.delete('product:{}'.format(product_id))) and bool(
+            self.redis.srem('products', product_id))
 
     def new_category_id(self):
         """
@@ -99,7 +99,7 @@ class DataStore(object):
         :return: Success.
         """
         return bool(self.redis.hmset('category:{}'.format(category_id),
-                    {'Name': name, 'Products': 'category:{}:products'.format(category_id)}))
+                                     {'Name': name, 'Products': 'category:{}:products'.format(category_id)}))
 
     def get_category(self, category_id):
         """
@@ -117,8 +117,8 @@ class DataStore(object):
         :param category_id: The ID of the category.
         :return: Success.
         """
-        return bool(self.redis.delete('category:{}'.format(category_id))) and \
-            bool(self.redis.srem('categories', category_id))
+        return bool(self.redis.delete('category:{}'.format(category_id))) and bool(
+            self.redis.srem('categories', category_id))
 
     def get_category_id(self, name):
         """
