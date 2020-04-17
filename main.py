@@ -17,10 +17,6 @@ def get_product(product_id):
     # get product
     values = ds.get_product(product_id)
 
-    # populate references
-    values['MainCategory'] = ds.get_category(values['MainCategory'])
-    values['Images'] = ds.get_product_images(product_id)
-
     return json.dumps(values)
 
 
@@ -34,14 +30,13 @@ def post_product():
     product_id = ds.new_product_id()
 
     # set category
-    category_id = ds.get_category_id(values['MainCategory'])
+    category_id = ds.get_category_id(values['MainCategoryName'])
     if not category_id:
         category_id = ds.new_category_id()
-        ds.set_category(category_id, values['MainCategory'])
+        ds.set_category(category_id, values['MainCategoryName'])
     ds.add_product_to_category(product_id, category_id)
-    ds.set_category_name_idx(values['MainCategory'], category_id)
-    ds.incr_category_rnk(values['MainCategory'])
-    values['MainCategory'] = category_id
+    ds.set_category_name_idx(values['MainCategoryName'], category_id)
+    ds.incr_category_rnk(values['MainCategoryName'])
 
     # set images
     img_ids = []
@@ -69,10 +64,12 @@ def put_product(product_id):
     old_values = ds.get_product(product_id)
 
     # check category
-    if new_values['MainCategory'] != old_values['MainCategory']:
+    if new_values['MainCategoryName'] != old_values['MainCategoryName']:
+
+        old_category_id = ds.get_category_id(old_values['MainCategoryName'])
 
         # remove old category
-        category_id = old_values['MainCategory']
+        category_id = old_category_id
         category = ds.get_category(category_id)
         ds.decr_category_rnk(category['Name'])
         ds.rem_category_name_idx(category['Name'])
@@ -82,9 +79,9 @@ def put_product(product_id):
         category_id = ds.get_category_id(new_values['MainCategory'])
         if not category_id:
             category_id = ds.new_category_id()
-            ds.set_category(category_id, new_values['MainCategory'])
-        ds.set_category_name_idx(new_values['MainCategory'], category_id)
-        ds.incr_category_rnk(new_values['MainCategory'])
+            ds.set_category(category_id, new_values['MainCategoryName'])
+        ds.set_category_name_idx(new_values['MainCategoryName'], category_id)
+        ds.incr_category_rnk(new_values['MainCategoryName'])
         ds.add_product_to_category(product_id, category_id)
         new_values['MainCategory'] = category_id
 
@@ -94,7 +91,7 @@ def put_product(product_id):
         # remove old images
         imgs_to_remove = set(old_values['Images']) - set(new_values['Images'])
         for img in imgs_to_remove:
-            img_id = ds.get_iamge_id(img)
+            img_id = ds.get_image_id(img)
             ds.rem_image(img_id)
             ds.rem_images_from_product(product_id, img_id)
 
@@ -121,13 +118,13 @@ def delete_prodcut(product_id):
 
     # product
     deleted = ds.rem_product(product_id)
-    ds.rem_product_from_category(product_id, values['MainCategory'])
+    category_id = ds.get_category_id(values['MainCategoryName'])
+    ds.rem_product_from_category(product_id, category_id)
     ds.rem_product_name_idx(values['Name'])
 
     # category
-    cagtegory = ds.get_category(values['MainCategory'])
-    ds.decr_category_rnk(cagtegory['Name'])
-    ds.rem_category_name_idx(cagtegory['Name'])
+    ds.decr_category_rnk(values['MainCategoryName'])
+    ds.rem_category_name_idx(values['MainCategoryName'])
 
     # images
     img_ids = ds.get_product_image_ids(product_id)

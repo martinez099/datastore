@@ -7,7 +7,7 @@ Description: String
 Vendor : String
 Price : Number
 Currency : String
-MainCategory : Category (1)
+MainCategoryName : Category (1)
 Images : Image (0..n)
 
 Category
@@ -169,7 +169,7 @@ class DataStore(object):
         return bool(self.redis.delete('image:{}'.format(img_id))) and \
             bool(self.redis.srem('images', img_id))
 
-    def get_iamge_id(self, image):
+    def get_image_id(self, image):
         """
         Get the ID of an image.
 
@@ -246,7 +246,7 @@ class DataStore(object):
         :param product_id: The ID of the product.
         :return: The list of images.
         """
-        return [self.redis.get('image:{}'.format(i)) for i in
+        return [self.redis.get('image:{}'.format(image_id)) for image_id in
                 self.redis.smembers('product:{}:images'.format(product_id))]
 
     def incr_category_rnk(self, category_name):
@@ -282,7 +282,7 @@ class DataStore(object):
         :param category_id: The ID of the category.
         :return: A list with all products of a category.
         """
-        return [self.redis.hgetall('product:{}'.format(idx)) for idx in
+        return [self.redis.hgetall('product:{}'.format(product_id)) for product_id in
                 self.redis.smembers('category:{}:products'.format(category_id))]
 
     def set_category_name_idx(self, category_name, category_id):
@@ -330,5 +330,5 @@ class DataStore(object):
         :param term: The search term.
         :return: The list with products having :param term: in the name.
         """
-        return [self.redis.hgetall('product:{}'.format(idx[1])) for idx in
+        return [self.redis.hgetall('product:{}'.format(product_id[1])) for product_id in
                 self.redis.hscan_iter('idx:product_name', '*{}*'.format(term))]

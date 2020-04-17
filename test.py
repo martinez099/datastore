@@ -12,7 +12,7 @@ prod1 = {
     "Vendor": "Vendor1",
     "Price": 123,
     "Currency": "EUR",
-    "MainCategory": "Category1",
+    "MainCategoryName": "Category1",
     "Images": ["asdfasdfasdfasdfadsfasdfasdfasdf", "yvcycvycvyxvcycxvvxcyxcvyvxc"]
 }
 
@@ -22,7 +22,7 @@ prod2 = {
     "Vendor": "Vendor2",
     "Price": 23.23,
     "Currency": "EUR",
-    "MainCategory": "Category2",
+    "MainCategoryName": "Category2",
     "Images": ["asdfasdfasdfasfffdfadsfasdfasdfasdf", "yqqqqvcycvycvyxvcycxvvxcyxcvyvxc", "qyyyywerqwreqwewerqwerqwrer"]
 }
 
@@ -32,7 +32,7 @@ prod3 = {
     "Vendor": "Vendor3",
     "Price": 2.23,
     "Currency": "EUR",
-    "MainCategory": "Category2",
+    "MainCategoryName": "Category2",
     "Images": ["asdfasdfasdfasfffdfadsfasdfasdf"]
 }
 
@@ -42,7 +42,7 @@ prod4 = {
     "Vendor": "Vendor3",
     "Price": 4.21,
     "Currency": "EUR",
-    "MainCategory": "Category2",
+    "MainCategoryName": "Category2",
     "Images": ["asdfasdfatttttttadsfasdfasdf", "wwwwwwwycvyxvcycxvvxcyxcvy", "yopvfpofvpofvvmmäööploo"]
 }
 
@@ -52,7 +52,7 @@ prod5 = {
     "Vendor": "Vendor1",
     "Price": 0.98,
     "Currency": "EUR",
-    "MainCategory": "Category3",
+    "MainCategoryName": "Category3",
     "Images": ["vuuvuuvuvsduwefubuiewfaodfsdf", "qsqsqsqdsypotrihkdptzobopgfmbgb"]
 }
 
