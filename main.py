@@ -8,11 +8,11 @@ from datastore import DataStore
 
 
 app = Flask(__name__)
-ds = DataStore(StrictRedis(decode_responses=True))
+ds = DataStore(StrictRedis(decode_responses=True, host="localhost", port=6379))
 
 
 @app.route('/product/<product_id>', methods=['GET'])
-def GET_product(product_id):
+def get_product(product_id):
 
     # get product
     values = ds.get_product(product_id)
@@ -25,7 +25,7 @@ def GET_product(product_id):
 
 
 @app.route('/product', methods=['POST'])
-def POST_product():
+def post_product():
 
     # parse request body
     values = json.loads(request.data)
@@ -60,7 +60,7 @@ def POST_product():
 
 
 @app.route('/product/<product_id>', methods=['PUT'])
-def PUT_product(product_id):
+def put_product(product_id):
 
     # product to update to
     new_values = json.loads(request.data)
@@ -114,7 +114,7 @@ def PUT_product(product_id):
 
 
 @app.route('/product/<product_id>', methods=['DELETE'])
-def DELETE_prodcut(product_id):
+def delete_prodcut(product_id):
 
     # product to be deleted
     values = ds.get_product(product_id)
@@ -139,27 +139,27 @@ def DELETE_prodcut(product_id):
 
 
 @app.route('/category/<category_id>', methods=['GET'])
-def GET_category(category_id=None):
+def get_category(category_id=None):
     return json.dumps(ds.get_category(category_id))
 
 
 @app.route('/image/<image_id>', methods=['GET'])
-def GET_image(image_id=None):
+def get_image(image_id=None):
     return ds.get_image(image_id)
 
 
 @app.route('/search/<term>', methods=['GET'])
-def GET_search(term):
+def get_search(term):
     return json.dumps(ds.search_products(term))
 
 
 @app.route('/list/<category_id>', methods=['GET'])
-def GET_list_by_category(category_id):
+def get_list_by_category(category_id):
     return json.dumps(ds.list_products(category_id))
 
 
 @app.route('/list', methods=['GET'])
-def GET_list():
+def get_list():
     return json.dumps(ds.list_categories())
 
 

@@ -44,6 +44,7 @@ class DataStore(object):
         """
         product_id = self.redis.incr('seq:product')
         self.redis.sadd('products', product_id)
+
         return product_id
 
     def set_product(self, product_id, values):
@@ -86,6 +87,7 @@ class DataStore(object):
         """
         category_id = self.redis.incr('seq:category')
         self.redis.sadd('categories', category_id)
+
         return category_id
 
     def set_category(self, category_id, name):
@@ -135,6 +137,7 @@ class DataStore(object):
         """
         image_id = self.redis.incr('seq:image')
         self.redis.sadd('images', image_id)
+
         return image_id
 
     def set_image(self, image_id, value):
@@ -175,6 +178,7 @@ class DataStore(object):
         """
         image_ids = self.redis.smembers('images')
         image_id = list(filter(lambda x: x == image, [self.get_image(img_id) for img_id in image_ids]))
+
         return image_id[0] if image_id else None
 
     def add_product_to_category(self, product_id, category_id):
@@ -240,7 +244,7 @@ class DataStore(object):
         Get all images of a product.
 
         :param product_id: The ID of the product.
-        :return: The list with IDs of the images.
+        :return: The list of images.
         """
         return [self.redis.get('image:{}'.format(i)) for i in
                 self.redis.smembers('product:{}:images'.format(product_id))]
